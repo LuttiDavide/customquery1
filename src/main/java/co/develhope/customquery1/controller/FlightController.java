@@ -1,7 +1,11 @@
-package co.develhope.customquery1;
+package co.develhope.customquery1.controller;
 
+import co.develhope.customquery1.entity.Flight;
+import co.develhope.customquery1.repository.FlightRepository;
+import co.develhope.customquery1.entity.enums.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -29,13 +33,18 @@ public class FlightController {
                     flight.setStatus(Status.ON_TIME);
                     return flight;
                 })
-                .map(flightRepository::save)
+                .peek(flight -> flightRepository.saveFlight(flight.getDescription(), flight.getFromAirport(), flight.getToAirport(), flight.getStatus()))
                 .collect(Collectors.toList());
     }
 
     @GetMapping
     public List<Flight> getAllFlights() {
         return flightRepository.findAll();
+    }
+
+    @GetMapping("/status/{status}")
+    public List<Flight> getFlightsByStatus(@PathVariable("status") Status status) {
+        return flightRepository.findByStatus(status);
     }
 
     private String randomString(int length) {
@@ -45,5 +54,4 @@ public class FlightController {
                 .map(Object::toString)
                 .collect(Collectors.joining());
     }
-
 }

@@ -1,5 +1,6 @@
-package co.develhope.customquery1;
+package co.develhope.customquery1.entity;
 
+import co.develhope.customquery1.entity.enums.Status;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
